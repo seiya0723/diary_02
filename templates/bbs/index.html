@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Hello World test!!</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'bbs/css/style.css' %}">
+
+</head>
+<body>
+    <h1 class="bg-primary text-white">これはテストです</h1>
+
+
+    <main class="row">
+
+        <div class="col-4">
+            <div class="test">テスト</div>
+            <form method="POST">
+                {% csrf_token %}
+                <textarea class="form-control" name="comment"></textarea>
+                <input class="form-control" type="submit" value="送信">
+            </form>
+
+            <form method="GET">
+                <select name="year">
+                    <option value="2021" {% if year == 2021  %}selected{% endif %}>2021年</option>
+                    <option value="2020" {% if year == 2020  %}selected{% endif %}>2020年</option>
+                </select>
+                <select name="month">
+                    <option value="1"  {% if month == 1  %}selected{% endif %}>1月</option>
+                    <option value="2"  {% if month == 2  %}selected{% endif %}>2月</option>
+                    <option value="3"  {% if month == 3  %}selected{% endif %}>3月</option>
+                    <option value="4"  {% if month == 4  %}selected{% endif %}>4月</option>
+                    <option value="5"  {% if month == 5  %}selected{% endif %}>5月</option>
+                    <option value="6"  {% if month == 6  %}selected{% endif %}>6月</option>
+                    <option value="7"  {% if month == 7  %}selected{% endif %}>7月</option>
+                    <option value="8"  {% if month == 8  %}selected{% endif %}>8月</option>
+                    <option value="9"  {% if month == 9  %}selected{% endif %}>9月</option>
+                    <option value="10" {% if month == 10 %}selected{% endif %}>10月</option>
+                    <option value="11" {% if month == 11 %}selected{% endif %}>11月</option>
+                    <option value="12" {% if month == 12 %}selected{% endif %}>12月</option>
+                </select>
+                <input type="submit" value="絞り込み">
+            </form>
+
+            <table class="calender">
+                <thead>
+                    <tr class="calender_head">
+                        <td>日</td>
+                        <td>月</td>
+                        <td>火</td>
+                        <td>水</td>
+                        <td>木</td>
+                        <td>金</td>
+                        <td>土</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for w in days %}
+                    <tr>
+                        {% for d in w %}
+
+                        {% if d.id %}
+                        <td><a href="#{{ d.id }}" class="calender_link">{{ d.num }}</a></td>
+                        {% else %}
+                        <td>{{ d.num }}</td>
+                        {% endif %}
+
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+
+        </div>
+
+        <div class="col-8">
+
+            {# TODO:同じ日に複数の日記が投稿されている場合、id属性が重複してHTMLの構文上誤りになる。(ブラウザが解釈して問題なく動作はするので実害は無い) #}
+            {% for topic in topics %}
+            <div id="{{ topic.dt|date:"Ynj" }}" class="py-2 border">id:{{ topic.id }} comment:{{ topic.comment }} 投稿日時:{{ topic.dt|date:"Y-m-d H:i:s" }}</div>
+            {% endfor %}
+
+        
+        </div>
+        
+        
+        
+        
+    
+    </main>
+
+
+
+
+
+</body>
+</html>
+
